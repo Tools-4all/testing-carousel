@@ -572,21 +572,20 @@ class VanillaCarousel {
         if (e.target !== this.wrapper || !e.propertyName.includes('transform') || !this.isLooping) {
           return;
         }
-        
+
         // Remove the event listener immediately
         this.wrapper.removeEventListener('transitionend', handleTransitionEnd);
-        
-        // Use a small timeout to ensure the transition has fully completed
-        setTimeout(() => {
+
+        const completeLoop = () => {
           // Instantly move to equivalent position without any transition
           this.wrapper.style.transitionDuration = '0ms';
           this.currentIndex = equivalentIndex;
           this.updateRealIndex();
           this.setTransform(this.getSlideTranslate(this.currentIndex));
-          
+
           // Force a reflow to ensure the change is applied
           this.wrapper.offsetHeight;
-          
+
           // Re-enable everything after the next frame
           requestAnimationFrame(() => {
             this.wrapper.style.transitionDuration = '';
@@ -594,7 +593,12 @@ class VanillaCarousel {
             this.allowSlidePrev = true;
             this.isLooping = false;
           });
-        }, 10); // Small delay to ensure transition completion
+        };
+
+        // Wait for the next paint before completing the loop
+        requestAnimationFrame(() => {
+          requestAnimationFrame(completeLoop);
+        });
       };
       
       // Add the transition end listener
