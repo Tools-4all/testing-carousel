@@ -586,6 +586,7 @@ class VanillaCarousel {
           this.updateSlideClasses();
           this.updateNavigation();
           this.updatePagination();
+          this.setTransform(this.getSlideTranslate(this.currentIndex));
 
           // Force a reflow to ensure the change is applied
           this.wrapper.offsetHeight;
