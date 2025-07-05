@@ -1,0 +1,668 @@
+/* Vanilla Carousel Styles */
+.vanilla-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  z-index: 1;
+  /* Prevent text selection and dragging */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vanilla-carousel.carousel-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Wrapper */
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-sizing: content-box;
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  /* CRITICAL: Hardware acceleration for smooth transitions */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  /* Enhanced smoothness for seamless loop transitions */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.carousel-vertical .carousel-wrapper {
+  flex-direction: column;
+}
+
+/* Slides */
+.carousel-slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition-property: transform, opacity;
+  transition-timing-function: inherit;
+  transition-duration: inherit;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent content overflow */
+  /* Prevent text selection and dragging */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* ENHANCED: Multi-slide specific sizing with precise calculations */
+.carousel-multi-slide .carousel-slide {
+  /* Use CSS variable for precise width calculation */
+  width: var(--slide-width, calc((100% - (var(--space-between, 0px) * (var(--slides-per-view, 1) - 1))) / var(--slides-per-view, 1)));
+  margin-right: var(--space-between, 0px);
+  flex-shrink: 0;
+  min-width: 0; /* Prevent flex item from growing */
+  box-sizing: border-box;
+  /* Force hardware acceleration for smooth transitions */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ENHANCED: Force visibility during transitions for loop slides */
+.carousel-multi-slide.vanilla-carousel .carousel-slide-duplicate-prev,
+.carousel-multi-slide.vanilla-carousel .carousel-slide-duplicate-next {
+  opacity: 1;
+  visibility: visible;
+  will-change: transform;
+}
+
+/* ENHANCED: Ensure proper rendering during transitions */
+.carousel-multi-slide .carousel-wrapper {
+  /* Force GPU acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* FIXED: Proper spacing management for multi-slide */
+.carousel-multi-slide .carousel-slide:last-child {
+  margin-right: 0;
+}
+
+/* ENHANCED: Wrapper sizing for multi-slide - precise width calculation */
+.carousel-multi-slide .carousel-wrapper {
+  width: 100%;
+  margin-right: 0;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Prevent image dragging */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Prevent dragging for all content inside slides */
+.carousel-slide * {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+/* Allow text selection for slide content when not dragging */
+.carousel-slide .slide-content {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* But prevent selection during dragging */
+.carousel-dragging .slide-content {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Grab cursor */
+.carousel-grab {
+  cursor: grab;
+}
+
+.carousel-grab.carousel-dragging {
+  cursor: grabbing;
+}
+
+/* Lazy loading */
+.carousel-lazy {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.carousel-lazy:not([data-src]) {
+  opacity: 1;
+}
+
+/* Effects */
+.carousel-effect-fade .carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.carousel-effect-fade .carousel-slide-active {
+  opacity: 1;
+}
+
+/* Cube effect */
+.carousel-effect-cube {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.carousel-effect-cube .carousel-wrapper {
+  transform-style: preserve-3d;
+}
+
+.carousel-effect-cube .carousel-slide {
+  visibility: hidden;
+  transform-origin: 0 0;
+  backface-visibility: hidden;
+}
+
+.carousel-effect-cube .carousel-slide-active,
+.carousel-effect-cube .carousel-slide-next,
+.carousel-effect-cube .carousel-slide-prev {
+  visibility: visible;
+}
+
+/* Coverflow effect */
+.carousel-effect-coverflow {
+  perspective: 1200px;
+}
+
+.carousel-effect-coverflow .carousel-slide {
+  transform-origin: center center;
+}
+
+.carousel-effect-coverflow .carousel-slide:not(.carousel-slide-active) {
+  opacity: 0.5;
+  transform: rotateY(45deg) scale(0.8);
+}
+
+/* Navigation buttons - PERFECTLY CENTERED POSITIONING */
+.carousel-button-next,
+.carousel-button-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  user-select: none;
+  outline: none;
+  /* Prevent text selection on buttons */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.carousel-button-next:hover,
+.carousel-button-prev:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-button-next:active,
+.carousel-button-prev:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-button-next.carousel-button-disabled,
+.carousel-button-prev.carousel-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* PERFECT CENTERING - Navigation positioned relative to parent container */
+.carousel-button-prev {
+  left: 20px;
+}
+
+.carousel-button-next {
+  right: 20px;
+}
+
+/* Navigation arrows */
+.carousel-button-next::after,
+.carousel-button-prev::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  /* Prevent selection of pseudo-elements */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.carousel-button-prev::after {
+  border-width: 6px 10px 6px 0;
+  border-color: transparent #333 transparent transparent;
+  margin-left: -2px;
+}
+
+.carousel-button-next::after {
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent #333;
+  margin-right: -2px;
+}
+
+/* Pagination - Fixed positioning with unique IDs */
+.carousel-pagination {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  /* Prevent text selection on pagination */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.carousel-pagination-bullets {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.carousel-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s ease;
+  position: relative;
+  outline: none;
+  /* Prevent text selection on bullets */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.carousel-pagination-bullet:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.2);
+}
+
+.carousel-pagination-bullet-active {
+  background: #fff;
+  transform: scale(1.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Dynamic bullets */
+.carousel-pagination.carousel-pagination-dynamic {
+  overflow: hidden;
+  width: auto;
+}
+
+.carousel-pagination-dynamic .carousel-pagination-bullet {
+  transition: all 0.3s ease, width 0.3s ease;
+}
+
+.carousel-pagination-dynamic .carousel-pagination-bullet-active {
+  width: 24px;
+  border-radius: 6px;
+}
+
+/* Fraction pagination */
+.carousel-pagination-fraction {
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.carousel-pagination-current {
+  font-weight: 700;
+}
+
+/* Progress bar pagination */
+.carousel-pagination-progressbar {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.carousel-pagination-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+/* PERFECT CENTERING - Unique positioning for different carousels */
+#basic-carousel {
+  /* No margin needed - buttons positioned inside */
+}
+
+#basic-carousel .carousel-pagination {
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#multi-carousel {
+  /* No margin needed - buttons positioned inside */
+}
+
+#multi-carousel .carousel-pagination {
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#image-carousel {
+  /* No margin needed - buttons positioned inside */
+}
+
+#image-carousel .carousel-pagination {
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#vertical-carousel .carousel-pagination {
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+  left: auto;
+}
+
+#fade-carousel .carousel-pagination {
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#progress-carousel .carousel-pagination {
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  transform: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .carousel-button-next,
+  .carousel-button-prev {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .carousel-button-prev {
+    left: 10px;
+  }
+  
+  .carousel-button-next {
+    right: 10px;
+  }
+  
+  /* Adjust pagination for mobile */
+  #basic-carousel .carousel-pagination,
+  #multi-carousel .carousel-pagination,
+  #image-carousel .carousel-pagination,
+  #fade-carousel .carousel-pagination {
+    bottom: -30px;
+  }
+  
+  #vertical-carousel .carousel-pagination {
+    right: 15px;
+  }
+  
+  .carousel-pagination-bullet {
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* ENHANCED: Better multi-slide responsive behavior */
+  .carousel-multi-slide .carousel-slide {
+    /* Ensure slides don't get too small on mobile */
+    min-width: 150px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-wrapper,
+  .carousel-slide,
+  .carousel-button-next,
+  .carousel-button-prev,
+  .carousel-pagination-bullet,
+  .carousel-pagination-progress {
+    transition: none !important;
+  }
+}
+
+/* Focus styles for accessibility */
+.carousel-button-next:focus,
+.carousel-button-prev:focus,
+.carousel-pagination-bullet:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .carousel-button-next,
+  .carousel-button-prev {
+    background: white;
+    border: 2px solid black;
+  }
+  
+  .carousel-pagination-bullet {
+    background: white;
+    border: 2px solid black;
+  }
+  
+  .carousel-pagination-bullet-active {
+    background: black;
+  }
+}
+
+/* RTL support */
+[dir="rtl"] .carousel-button-prev {
+  right: 20px;
+  left: auto;
+}
+
+[dir="rtl"] .carousel-button-next {
+  left: 20px;
+  right: auto;
+}
+
+[dir="rtl"] .carousel-button-prev::after {
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent #333;
+  margin-left: 0;
+  margin-right: -2px;
+}
+
+[dir="rtl"] .carousel-button-next::after {
+  border-width: 6px 10px 6px 0;
+  border-color: transparent #333 transparent transparent;
+  margin-right: 0;
+  margin-left: -2px;
+}
+
+/* Zoom effect */
+.carousel-zoom-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.carousel-zoom-container.carousel-zoom-active {
+  cursor: zoom-out;
+}
+
+.carousel-zoom-container img {
+  transition: transform 0.3s ease;
+}
+
+.carousel-zoom-container.carousel-zoom-active img {
+  transform: scale(2);
+}
+
+/* Parallax effect */
+.carousel-parallax {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Custom scrollbar for horizontal free mode */
+.carousel-horizontal.carousel-free-mode {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+.carousel-horizontal.carousel-free-mode::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carousel-horizontal.carousel-free-mode::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.carousel-horizontal.carousel-free-mode::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+}
+
+.carousel-horizontal.carousel-free-mode::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Loading spinner */
+.carousel-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  animation: carousel-spin 1s linear infinite;
+  z-index: 20;
+}
+
+@keyframes carousel-spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ENHANCED: Smooth animations with hardware acceleration */
+.carousel-wrapper {
+  will-change: transform;
+}
+
+.carousel-slide {
+  will-change: transform, opacity;
+}
+
+/* Print styles */
+@media print {
+  .vanilla-carousel {
+    overflow: visible !important;
+  }
+  
+  .carousel-wrapper {
+    transform: none !important;
+    display: block !important;
+  }
+  
+  .carousel-slide {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+  
+  .carousel-button-next,
+  .carousel-button-prev,
+  .carousel-pagination {
+    display: none !important;
+  }
+}

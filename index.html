@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vanilla Carousel - Full Featured Demo</title>
+    <link rel="stylesheet" href="carousel.css">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      
+      h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+      
+      .demo-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 80px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        position: relative;
+      }
+      
+      .demo-title {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #333;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+      }
+      
+      .carousel-demo {
+        height: 400px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      }
+      
+      .demo-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+      }
+      
+      .slide-content {
+        text-align: center;
+        padding: 20px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+      }
+      
+      .slide-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+      
+      .slide-description {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+      
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+      
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        background: #667eea;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      
+      .btn:hover {
+        background: #5a67d8;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+      
+      .thumbnails-demo {
+        height: 300px;
+      }
+      
+      .thumbnails {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        overflow-x: auto;
+        padding: 10px 0;
+      }
+      
+      .thumbnail {
+        width: 80px;
+        height: 60px;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        border: 2px solid transparent;
+      }
+      
+      .thumbnail:hover,
+      .thumbnail.active {
+        opacity: 1;
+        border-color: #667eea;
+        transform: scale(1.05);
+      }
+      
+      .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .vertical-demo {
+        height: 500px;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      
+      .grid-demo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+      }
+      
+      .grid-demo .carousel-demo {
+        height: 250px;
+      }
+      
+      .multi-slide {
+        margin: 0 5px;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px 10px;
+        }
+        
+        h1 {
+          font-size: 2rem;
+        }
+        
+        .demo-section {
+          padding: 20px;
+          margin-bottom: 60px;
+        }
+        
+        .carousel-demo {
+          height: 300px;
+        }
+        
+        .grid-demo {
+          grid-template-columns: 1fr;
+        }
+        
+        .slide-title {
+          font-size: 1.8rem;
+        }
+        
+        .slide-description {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎠 Vanilla Carousel Library</h1>
+      
+      <!-- Basic Carousel -->
+      <div class="demo-section">
+        <h2 class="demo-title">Basic Carousel with Seamless Loop & Auto-play</h2>
+        <div class="carousel-demo" id="basic-carousel">
+          <div class="demo-slide" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24);">
+            <div class="slide-content">
+              <div class="slide-title">Slide 1</div>
+              <div class="slide-description">Seamless infinite loop</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">
+            <div class="slide-content">
+              <div class="slide-title">Slide 2</div>
+              <div class="slide-description">Touch and mouse drag support</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background: linear-gradient(45deg, #45b7d1, #96c93d);">
+            <div class="slide-content">
+              <div class="slide-title">Slide 3</div>
+              <div class="slide-description">Keyboard navigation enabled</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background: linear-gradient(45deg, #f093fb, #f5576c);">
+            <div class="slide-content">
+              <div class="slide-title">Slide 4</div>
+              <div class="slide-description">Auto-play with pause on hover</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background: linear-gradient(45deg, #4facfe, #00f2fe);">
+            <div class="slide-content">
+              <div class="slide-title">Slide 5</div>
+              <div class="slide-description">Endless scrolling experience</div>
+            </div>
+          </div>
+        </div>
+        <div id="basic-pagination"></div>
+        <button id="basic-prev" aria-label="Previous slide"></button>
+        <button id="basic-next" aria-label="Next slide"></button>
+        
+        <div class="controls">
+          <button class="btn" onclick="basicCarousel.slideNext()">Next</button>
+          <button class="btn" onclick="basicCarousel.slidePrev()">Previous</button>
+          <button class="btn" onclick="basicCarousel.slideTo(2)">Go to Slide 3</button>
+        </div>
+      </div>
+      
+      <!-- Multiple Slides Per View -->
+      <div class="demo-section">
+        <h2 class="demo-title">Multiple Slides Per View (Responsive + Loop)</h2>
+        <div class="carousel-demo" id="multi-carousel">
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <div class="slide-content">
+              <div class="slide-title">1</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+            <div class="slide-content">
+              <div class="slide-title">2</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+            <div class="slide-content">
+              <div class="slide-title">3</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+            <div class="slide-content">
+              <div class="slide-title">4</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+            <div class="slide-content">
+              <div class="slide-title">5</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+            <div class="slide-content">
+              <div class="slide-title">6</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
+            <div class="slide-content">
+              <div class="slide-title">7</div>
+            </div>
+          </div>
+          <div class="demo-slide multi-slide" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+            <div class="slide-content">
+              <div class="slide-title">8</div>
+            </div>
+          </div>
+        </div>
+        <div id="multi-pagination"></div>
+        <button id="multi-prev"></button>
+        <button id="multi-next"></button>
+      </div>
+      
+      <!-- Image Carousel with Thumbnails -->
+      <div class="demo-section">
+        <h2 class="demo-title">Image Carousel with Thumbnails</h2>
+        <div class="carousel-demo thumbnails-demo" id="image-carousel">
+          <div class="demo-slide" style="background-image: url('https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1200');">
+            <div class="slide-content">
+              <div class="slide-title">Mountain Lake</div>
+              <div class="slide-description">Serene mountain reflection</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background-image: url('https://images.pexels.com/photos/1574236/pexels-photo-1574236.jpeg?auto=compress&cs=tinysrgb&w=1200');">
+            <div class="slide-content">
+              <div class="slide-title">Ocean Sunset</div>
+              <div class="slide-description">Golden hour by the sea</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background-image: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=1200');">
+            <div class="slide-content">
+              <div class="slide-title">Forest Path</div>
+              <div class="slide-description">Misty woodland trail</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background-image: url('https://images.pexels.com/photos/1433052/pexels-photo-1433052.jpeg?auto=compress&cs=tinysrgb&w=1200');">
+            <div class="slide-content">
+              <div class="slide-title">Desert Dunes</div>
+              <div class="slide-description">Endless golden sands</div>
+            </div>
+          </div>
+        </div>
+        <button id="image-prev"></button>
+        <button id="image-next"></button>
+        
+        <div class="thumbnails" id="thumbnails">
+          <div class="thumbnail active" data-slide="0">
+            <img src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Mountain Lake">
+          </div>
+          <div class="thumbnail" data-slide="1">
+            <img src="https://images.pexels.com/photos/1574236/pexels-photo-1574236.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Ocean Sunset">
+          </div>
+          <div class="thumbnail" data-slide="2">
+            <img src="https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Forest Path">
+          </div>
+          <div class="thumbnail" data-slide="3">
+            <img src="https://images.pexels.com/photos/1433052/pexels-photo-1433052.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Desert Dunes">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vertical Carousel -->
+      <div class="demo-section">
+        <h2 class="demo-title">Vertical Carousel</h2>
+        <div class="carousel-demo vertical-demo" id="vertical-carousel">
+          <div class="demo-slide" style="background: linear-gradient(to bottom, #667eea, #764ba2);">
+            <div class="slide-content">
+              <div class="slide-title">Top</div>
+              <div class="slide-description">Vertical scrolling</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background: linear-gradient(to bottom, #f093fb, #f5576c);">
+            <div class="slide-content">
+              <div class="slide-title">Middle</div>
+              <div class="slide-description">Smooth vertical transitions</div>
+            </div>
+          </div>
+          <div class="demo-slide" style="background: linear-gradient(to bottom, #4facfe, #00f2fe);">
+            <div class="slide-content">
+              <div class="slide-title">Bottom</div>
+              <div class="slide-description">Touch & keyboard support</div>
+            </div>
+          </div>
+        </div>
+        <div id="vertical-pagination"></div>
+      </div>
+      
+      <!-- Advanced Features Grid -->
+      <div class="demo-section">
+        <h2 class="demo-title">Advanced Features</h2>
+        <div class="grid-demo">
+          <!-- Fade Effect -->
+          <div>
+            <h3 style="margin-bottom: 15px;">Fade Effect</h3>
+            <div class="carousel-demo" id="fade-carousel">
+              <div class="demo-slide" style="background: linear-gradient(45deg, #ff9a9e, #fecfef);">
+                <div class="slide-content">
+                  <div class="slide-title">Fade 1</div>
+                </div>
+              </div>
+              <div class="demo-slide" style="background: linear-gradient(45deg, #a8edea, #fed6e3);">
+                <div class="slide-content">
+                  <div class="slide-title">Fade 2</div>
+                </div>
+              </div>
+              <div class="demo-slide" style="background: linear-gradient(45deg, #d299c2, #fef9d7);">
+                <div class="slide-content">
+                  <div class="slide-title">Fade 3</div>
+                </div>
+              </div>
+            </div>
+            <div id="fade-pagination"></div>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div>
+            <h3 style="margin-bottom: 15px;">Progress Bar Pagination</h3>
+            <div class="carousel-demo" id="progress-carousel">
+              <div class="demo-slide" style="background: linear-gradient(45deg, #667eea, #764ba2);">
+                <div class="slide-content">
+                  <div class="slide-title">Progress 1</div>
+                </div>
+              </div>
+              <div class="demo-slide" style="background: linear-gradient(45deg, #f093fb, #f5576c);">
+                <div class="slide-content">
+                  <div class="slide-title">Progress 2</div>
+                </div>
+              </div>
+              <div class="demo-slide" style="background: linear-gradient(45deg, #4facfe, #00f2fe);">
+                <div class="slide-content">
+                  <div class="slide-title">Progress 3</div>
+                </div>
+              </div>
+            </div>
+            <div id="progress-pagination"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="carousel.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
