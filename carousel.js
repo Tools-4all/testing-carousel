@@ -578,9 +578,14 @@ class VanillaCarousel {
 
         const completeLoop = () => {
           // Instantly move to equivalent position without any transition
+          const currentTranslate = this.getTranslate();
           this.wrapper.style.transitionDuration = '0ms';
           this.currentIndex = equivalentIndex;
           this.updateRealIndex();
+          this.setTransform(currentTranslate);
+          this.updateSlideClasses();
+          this.updateNavigation();
+          this.updatePagination();
           this.setTransform(this.getSlideTranslate(this.currentIndex));
 
           // Force a reflow to ensure the change is applied
@@ -651,11 +656,20 @@ class VanillaCarousel {
     }
     
     this.setTransform(this.getSlideTranslate(this.currentIndex));
-    
+
     // Update slide states
+    this.updateSlideClasses();
+    
+    // Load lazy images for active slides
+    if (this.config.lazy) {
+      this.loadLazyImages();
+    }
+  }
+
+  updateSlideClasses() {
     this.slides.forEach((slide, index) => {
       slide.classList.remove('carousel-slide-active', 'carousel-slide-prev', 'carousel-slide-next');
-      
+
       if (this.isSlideActive(index)) {
         slide.classList.add('carousel-slide-active');
       } else if (index === this.currentIndex - 1) {
@@ -664,11 +678,6 @@ class VanillaCarousel {
         slide.classList.add('carousel-slide-next');
       }
     });
-    
-    // Load lazy images for active slides
-    if (this.config.lazy) {
-      this.loadLazyImages();
-    }
   }
 
   isSlideActive(index) {
